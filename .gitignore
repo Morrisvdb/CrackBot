@@ -1,0 +1,8 @@
+/bin
+/bot/__pycache__
+/include
+/lib
+/lib64
+.env
+pyvenv.cfg
+/bot/cogs/__pycache__
