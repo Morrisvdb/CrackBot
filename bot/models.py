@@ -6,7 +6,8 @@ class Message(Base):
 
     id = Column(Integer, primary_key=True)
     message_id = Column(Integer)
-    user = Column(String)
+    user_id = Column(Integer)
     content = Column(String)
+    
 
 Base.metadata.create_all(engine)

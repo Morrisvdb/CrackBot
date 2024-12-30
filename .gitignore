@@ -1,8 +1,10 @@
 /bin
 /bot/__pycache__
+/bot/cogs/__pycache__
 /include
 /lib
 /lib64
+/Scripts
 .env
 pyvenv.cfg
-/bot/cogs/__pycache__
+database.db
