@@ -10,8 +10,6 @@ class Message(Base):
     user_id = Column(Integer)
     content = Column(String)
     
-<<<<<<< HEAD
-
 
 class MessageArchive(Base):
     __tablename__ = 'messages_archive'
@@ -32,7 +30,5 @@ class MessageArchive(Base):
         db.add(new_message)
         db.commit()
 
-=======
->>>>>>> 9b17aed6140021f0f8b6bee8d1672526a4f24449
 
 Base.metadata.create_all(engine)
