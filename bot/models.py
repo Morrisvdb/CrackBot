@@ -7,9 +7,10 @@ class Message(Base):
 
     id = Column(Integer, primary_key=True)
     message_id = Column(Integer)
-    user = Column(String)
+    user_id = Column(Integer)
     content = Column(String)
     
+<<<<<<< HEAD
 
 
 class MessageArchive(Base):
@@ -31,5 +32,7 @@ class MessageArchive(Base):
         db.add(new_message)
         db.commit()
 
+=======
+>>>>>>> 9b17aed6140021f0f8b6bee8d1672526a4f24449
 
 Base.metadata.create_all(engine)

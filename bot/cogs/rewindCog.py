@@ -13,7 +13,7 @@ class RewindCog(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        new_message = Message(message_id=message.id, user=message.author.name, content=message.content)
+        new_message = Message(message_id=message.id, content=message.content, user_id=message.author.id)
         db.add(new_message)
         db.commit()
         
@@ -26,10 +26,12 @@ class RewindCog(commands.Cog):
 
         nth_message = messages[-1]
         
-        new_webhook = await ctx.channel.create_webhook(name=nth_message.user)
+        user = self.bot.get_user(nth_message.user_id)
+        
+        new_webhook = await ctx.channel.create_webhook(name = user.name, avatar = await user.avatar.read(), reason = "Rewind")
         await new_webhook.send(content=nth_message.content)
         await new_webhook.delete()
-        
-        
+
+
 def setup(bot):
     bot.add_cog(RewindCog(bot))
