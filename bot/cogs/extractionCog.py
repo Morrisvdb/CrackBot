@@ -2,40 +2,48 @@ import discord
 from discord.ext import commands
 from __init__ import bot, db
 from models import MessageArchive
+import os, json
+
+async def jsonify(message: discord.Message):
+    dict = {
+        "content": message.content,
+        "author": message.author.name,
+        "is_bot": message.author.bot,
+        "timestamp": str(message.created_at),
+        "embeds": [embed.to_dict() for embed in message.embeds]
+    }
+    return dict
+
+async def saveData(channelData, channel):
+    if not os.path.exists(channel.guild.name):
+        os.mkdir(channel.guild.name)
+    if os.path.exists(f"./{channel.guild.name}/{channel.name}.json"):
+        os.remove(f"./{channel.guild.name}/{channel.name}.json")
+    with open(f"./{channel.guild.name}/{channel.name}.json", "w") as file:
+        file.write(json.dumps(channelData, indent=4))
 
 
 class ExtractionCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        
-    @commands.command(name='extract', guild_ids=[977513866097479760])
-    async def extract(self, ctx, count: int = 100, all: bool = False):
-        if count == 0:
-            count = None    
-        
-        if all:
-            all_channels = ctx.guild.text_channels
-        else:
-            all_channels = [ctx.channel]
-        
-        statusmsg = await ctx.send(f"Found {len(all_channels)} text channels.")
-        
-        number = 0
-        total_count = 0
-        for channel in all_channels:
-            await statusmsg.edit(f"Extracting channel {channel.name}.")
-            async for message in channel.history(limit=count, oldest_first=True):
-                MessageArchive.save(message_id=message.id, guild_id=message.guild.id, channel_id=message.channel.id, timestamp=message.created_at.timestamp(), user=message.author.name, content=message.content)
-                number += 1
-                total_count += 1
-                if number % 100 == 0:
-                    await statusmsg.edit(f"Extracted {number} messages from channel {channel.name}. \nTotal messages extracted: {total_count}.")
-            await statusmsg.edit(f"Extracted channel {channel.name}.")
-            number = 0
-            
-        await statusmsg.edit(f"Extracted {total_count} messages.")
-    
+    @commands.command(name="extract", aliases=["e"], guild_ids=[977513866097479760])
+    async def extract(self, ctx, count: int = None):
+        if ctx.author.id != 819182608600399872:
+            return
+        for channel in ctx.guild.text_channels:
+            count = 0
+            print(f"Extracting channel {channel.name}...")
+            channelData = []
+            async for msg in channel.history(limit=count, oldest_first=True):
+                count += 1
+                if count % 100 == 0:
+                    print(f"Progress: {count}", end='\r')
+                message = await jsonify(msg)
+                channelData.append(message)
+            await saveData(channelData, channel)
+            print(f"Data extracted from {channel.name} successfully!")
+        print(f"------- Extraction of {ctx.guild.name} Complete! -------")
         
 def setup(bot):
     bot.add_cog(ExtractionCog(bot))

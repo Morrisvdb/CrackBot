@@ -1,6 +1,6 @@
 from __init__ import db, Base, engine
 from sqlalchemy import Column, Integer, String
-import discord
+import discord, json, os
 
 class Message(Base):
     __tablename__ = 'messages'
@@ -23,7 +23,7 @@ class MessageArchive(Base):
     content = Column(String)
     
     
-    def save(message_id, guild_id, channel_id, timestamp, user, content):
+    def save(message_id, guild_id, channel_id, timestamp, user, content, message_obj = None):
         if db.query(MessageArchive).filter(MessageArchive.message_id == message_id).first():
             return
         new_message = MessageArchive(message_id=message_id, guild_id=guild_id, channel_id=channel_id, timestamp=timestamp, user=user, content=content)
