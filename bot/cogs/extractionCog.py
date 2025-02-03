@@ -43,6 +43,7 @@ class ExtractionCog(commands.Cog):
                 channelData.append(message)
                 
             await saveData(channelData, channel)
+            await ctx.send(f"Data extracted from {channel.name} successfully!")
             print(f"Data extracted from {channel.name} successfully!")
         print(f"------- Extraction of {ctx.guild.name} Complete! -------")
         
