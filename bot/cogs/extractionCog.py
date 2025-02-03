@@ -28,19 +28,20 @@ class ExtractionCog(commands.Cog):
         self.bot = bot
 
     @commands.command(name="extract", aliases=["e"], guild_ids=[977513866097479760])
-    async def extract(self, ctx, count: int = None):
+    async def extract(self, ctx, lim: int = None):
         if ctx.author.id != 819182608600399872:
             return
         for channel in ctx.guild.text_channels:
             count = 0
             print(f"Extracting channel {channel.name}...")
             channelData = []
-            async for msg in channel.history(limit=count, oldest_first=True):
+            async for msg in channel.history(limit=lim, oldest_first=True):
                 count += 1
                 if count % 100 == 0:
                     print(f"Progress: {count}", end='\r')
                 message = await jsonify(msg)
                 channelData.append(message)
+                
             await saveData(channelData, channel)
             print(f"Data extracted from {channel.name} successfully!")
         print(f"------- Extraction of {ctx.guild.name} Complete! -------")
