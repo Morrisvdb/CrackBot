@@ -17,7 +17,7 @@ class RewindCog(commands.Cog):
         db.commit()
         
     
-    @discord.slash_command(name="rewind", guild_ids=[977513866097479760])
+    @discord.slash_command(name="rewind")
     @discord.option('count', 'The number of messages to rewind', type=int)
     @discord.option("user", "The user to rewind", type=discord.User, required=False)
     async def rewind(self, ctx, count, user):
