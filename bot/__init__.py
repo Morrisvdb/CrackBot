@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from config import database_uri
 
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = discord.Bot(intents=intents)
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
