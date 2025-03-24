@@ -4,15 +4,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
+from config import database_uri
 
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = discord.Bot(intents=intents)
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 for i in range(5):
     try:
-        engine = create_engine('sqlite:///database.db')
+        engine = create_engine(database_uri)
+        # engine = create_engine('sqlite:///database.db')
         Base = declarative_base()
         Session = sessionmaker(bind=engine)
         db = Session()
