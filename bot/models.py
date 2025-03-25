@@ -30,5 +30,13 @@ class MessageArchive(Base):
         db.add(new_message)
         db.commit()
 
+class ServerConfig(Base):
+    __tablename__ = 'server_config'
+    
+    id = Column(Integer, primary_key=True)
+    guild_id = Column(Integer, unique=True)
+    key = Column(String)
+    value = Column(String)
+
 
 Base.metadata.create_all(engine)

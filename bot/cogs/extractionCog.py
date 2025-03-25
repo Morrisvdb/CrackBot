@@ -26,8 +26,15 @@ async def saveData(channelData, channel):
 class ExtractionCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author == self.bot:
+            return
+        
+        MessageArchive.save(message.id, message.guild.id, message.channel.id, message.created_at.timestamp(), message.author.name, message.content)
 
-    @commands.command(name="extract", aliases=["e"], guild_ids=[977513866097479760])
+    @discord.slash_command(name="extract", aliases=["e"], guild_ids=[977513866097479760])
     async def extract(self, ctx, lim: int = None):
         if ctx.author.id != 819182608600399872:
             return
