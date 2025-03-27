@@ -2,10 +2,20 @@ from discord.ext import commands
 from __init__ import db, bot
 from models import ServerConfig
 from googletrans import Translator
+from random import choice
+from os import path
 
 class SayWhatCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        
+    def get_response(self):
+        if (path.exists("bot/cogs/what.txt") == False):
+            with open("bot/cogs/what.txt", "w") as f:
+                f.write("Chicken Butt")
+        with open("bot/cogs/what.txt", "r") as f:
+            lines = f.readlines()
+        return choice(lines).strip()
         
     async def translate_what(self, message):
         message = message.lower()
@@ -14,7 +24,7 @@ class SayWhatCog(commands.Cog):
             print(f"Translating: {message}")
             translated = await translator.translate(message, dest='en')
             text = translated.text.lower()
-            print(text)
+            print(f"Translated: {text}")
             if text[-1] == "?":
                 text = text[:-1]
             if text[-4:] == 'what':
@@ -29,13 +39,13 @@ class SayWhatCog(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        if message.author.get_role(894922218235113504):
-            content : str =  message.content.lower()
-            if content[-4:] == "what" or content[-5:] == "what?":
-                await message.channel.send("Chicken Butt")
-            else:
-                if (await self.translate_what(content)):
-                    await message.channel.send("Chicken Butt")
+        # if message.author.get_role(894922218235113504):
+        content : str =  message.content.lower()
+        if content[-4:] == "what" or content[-5:] == "what?":
+            await message.channel.send(self.get_response())
+        else:
+            if (await self.translate_what(content)):
+                await message.channel.send(self.get_response())
                 
     
     
