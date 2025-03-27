@@ -29,13 +29,13 @@ class SayWhatCog(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        # if message.author.get_role(894922218235113504):
-        content : str =  message.content.lower()
-        if content[-4:] == "what" or content[-5:] == "what?":
-            await message.channel.send("Chicken Butt")
-        else:
-            if (await self.translate_what(content)):
+        if message.author.get_role(894922218235113504):
+            content : str =  message.content.lower()
+            if content[-4:] == "what" or content[-5:] == "what?":
                 await message.channel.send("Chicken Butt")
+            else:
+                if (await self.translate_what(content)):
+                    await message.channel.send("Chicken Butt")
                 
     
     
