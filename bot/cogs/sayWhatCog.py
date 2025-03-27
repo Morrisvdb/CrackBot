@@ -15,6 +15,8 @@ class SayWhatCog(commands.Cog):
             translated = await translator.translate(message, dest='en')
             if translated.text.lower() == 'what':
                 return True
+            else:
+                return False
         
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -28,8 +30,8 @@ class SayWhatCog(commands.Cog):
             if content[-4:] == "what" or content[-5:] == "what?":
                 await message.channel.send("Chicken Butt")
             else:
-                await self.translate_what(content)
-                await message.channel.send("Chicken Butt")
+                if (await self.translate_what(content)):
+                    await message.channel.send("Chicken Butt")
                 
     
     
