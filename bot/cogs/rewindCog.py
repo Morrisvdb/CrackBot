@@ -26,12 +26,11 @@ class RewindCog(commands.Cog):
         else:
             messages = db.query(Message).limit(count).all()
         
+
         for message in messages:
-            await ctx.defer(ephemeral=True)
-            user_webhook = await ctx.channel.create_webhook(name=user.name)
-            await user_webhook.send(content=message.content, username=user.name, avatar_url=user.avatar)
-            await user_webhook.delete()
-            
+            user = await self.bot.fetch_user(message.user_id)
+            await ctx.respond(f"**{user.name}:** {message.content}")
+
             
         
 def setup(bot):
