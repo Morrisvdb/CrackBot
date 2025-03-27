@@ -16,7 +16,7 @@ class SayWhatCog(commands.Cog):
         if message.author.get_role(894922218235113504):
             content : str =  message.content.lower()
             if content[-4:] == "what" or content[-5:] == "what?":
-                await message.channel.send("Chicken Butt!")
+                await message.channel.send("Chicken Butt")
     
     
 def setup(bot):
