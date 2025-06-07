@@ -38,5 +38,14 @@ class ServerConfig(Base):
     key = Column(String)
     value = Column(String)
 
+class TrackedChannels(Base):
+    __tablename__ = 'tracked_channels'
+    
+    id = Column(Integer, primary_key=True)
+    guild_id = Column(Integer)
+    channel_id = Column(Integer)
+    target_channel_id = Column(Integer)
+    
+
 
 Base.metadata.create_all(engine)

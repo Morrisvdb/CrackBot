@@ -1,30 +1,38 @@
 from discord.ext import commands
-from __init__ import db, bot
-from models import ServerConfig
 from googletrans import Translator
-from random import choice
+from numpy.random import choice
 from os import path
+import json
 
 class SayWhatCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         
     def get_response(self):
-        if (path.exists("bot/cogs/what.txt") == False):
-            with open("bot/cogs/what.txt", "w") as f:
-                f.write("Chicken Butt")
-        with open("bot/cogs/what.txt", "r") as f:
-            lines = f.readlines()
-        return choice(lines).strip()
+        if (path.exists("bot/cogs/what.json") == False):
+            with open("bot/cogs/what.json", "w") as f:
+                f.write("""
+                {\"responses\": {\"Chicken Butt\": 0.99}")}
+                """)
+        with open("bot/cogs/what.json", "r") as f:
+            json_data = json.load(f)
+            
+        if sum(list(json_data["responses"].values())) != 1:
+            print("0.o; Someone has not set up the what.json file correctly. Defaulting to Chicken Butt.")
+            chosen = ["Chicken Butt"]
+        else:
+            chosen = choice(list(json_data["responses"].keys()), 1, p=list(json_data["responses"].values()))
+            
+        return chosen[0]
         
     async def translate_what(self, message):
         message = message.lower()
         
         async with Translator() as translator:
-            print(f"Translating: {message}")
+            # print(f"Translating: {message}")
             translated = await translator.translate(message, dest='en')
             text = translated.text.lower()
-            print(f"Translated: {text}")
+            # print(f"Translated: {text}")
             if text[-1] == "?":
                 text = text[:-1]
             if text[-4:] == 'what':

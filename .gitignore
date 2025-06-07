@@ -7,4 +7,3 @@
 /Scripts
 .env
 pyvenv.cfg
-database.db
