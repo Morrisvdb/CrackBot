@@ -49,17 +49,19 @@ class mirrorChannelCog(commands.Cog):
     @discord.slash_command(name='track_channel', guild_ids=[1380949984673009805])
     @commands.has_permissions(manage_channels=True)
     async def track_channel(self, ctx, target_channel_id,
+                            # Idk why it gives these warnings, ignoring seems to work
                             fill_channel: discord.Option(bool, required = False, description="Wether the bot should put the last n messages in this channel so you can catch up.") = False, 
                             depth: discord.Option(int, required = False, description="The amount of messages to go back. ~1s/message. Default is 10 messages") = 10
                             ):
         """Track the current channel and mirror messages to the target channel."""
-        try:
+        try: # Parse the id to an integer
             target_channel_id = int(target_channel_id)
         except ValueError:
             target_channel_id = 0
             
         channel = self.bot.get_channel(target_channel_id)
         
+        # Check if the db entry exists
         if db.query(TrackedChannels).filter_by(target_channel_id = ctx.channel.id).first() is not None:
             if db.query(TrackedChannels).filter_by(target_channel_id = ctx.channel.id).first().channel_id == target_channel_id:
                 await ctx.respond(f"This channel is already mapped to {channel.mention}")
@@ -74,17 +76,8 @@ class mirrorChannelCog(commands.Cog):
             messages = messages[::-1]
         
             for message in messages:
+                # Decided against using a webhook here because it was waaaaay too slow
                 await ctx.send(f"**{message.author.name}: ** {message.content}")
-                
-                # webhook = await ctx.channel.create_webhook(name=f"MirrorWebhook-{message.author.name}")
-                # await webhook.send(
-                #     content=message.content,
-                #     username=message.author.name,
-                #     avatar_url=message.author.avatar.url if message.author.avatar else None,
-                #     embeds=message.embeds,
-                #     files=[await file.to_file() for file in message.attachments]
-                # )
-                # await webhook.delete()  # Clean up the webhook after use
         
         
             await ctx.send(f"Tracking channel {channel.mention} into this channel")

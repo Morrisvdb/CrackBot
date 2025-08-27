@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
 from __init__ import bot, db
-from models import Message
+from models import Message, MessageType
+from sqlalchemy import func
 
 class RewindCog(commands.Cog):
     def __init__(self, bot):
@@ -9,27 +10,40 @@ class RewindCog(commands.Cog):
         
     @commands.Cog.listener()
     async def on_message_delete(self, message):
-        if message.author == self.bot.user:
-            return
-
-        new_message = Message(message_id=message.id, content=message.content, user_id=message.author.id)
+        new_message = Message.from_discord_message(message)
         db.add(new_message)
         db.commit()
         
     
     @discord.slash_command(name="rewind")
+    @discord.option("user", "The user to rewind", type=discord.User)
     @discord.option('count', 'The number of messages to rewind', type=int)
-    @discord.option("user", "The user to rewind", type=discord.User, required=False)
     async def rewind(self, ctx, count, user):
-        if user:
-            messages = db.query(Message).filter(Message.user_id == user.id).limit(count).all()
-        else:
-            messages = db.query(Message).limit(count).all()
+        messages = (
+            db.query(Message)
+            .filter(func.json_extract(Message.json_content, '$.author.id') == str(user.id))
+            .order_by(Message.id.desc())
+            .limit(count)
+            .all()
+        )
+        # messages = db.query(Message).filter(Message.json_content['author']['id']. == str(user.id)).limit(count).all()
         
+        if len(messages) == 0:
+            await ctx.respond(f"{user} has not deleted any messages recently")
 
         for message in messages:
-            user = await self.bot.fetch_user(message.user_id)
-            await ctx.respond(f"**{user.name}:** {message.content}")
+            webhook = await ctx.channel.create_webhook(name="RewindWebhook")
+            
+            await webhook.send(
+                content = message.json_content.get('content'),
+                username = user.name,
+                avatar_url = user.avatar,
+            )
+            
+            await webhook.delete()
+
+            await ctx.respond(f"Rewound {len(messages)} message(s) from user {user}", ephemeral = True)
+
 
             
         
