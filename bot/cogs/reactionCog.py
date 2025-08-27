@@ -15,8 +15,11 @@ class ReactionCog(commands.Cog):
         
         nr = randint(0, 100)
         if nr == 0:
-            if message.author.id in [819182608600399872, 932294125208895539]:
-                await message.add_reaction("🫃")
+            # if message.author.id in [819182608600399872, 932294125208895539]:
+                reactions = ["🇳", "🇮", "🇬", "🇪", "🇷", "🫃"]  
+                # await message.add_reaction("🫃")
+                for reaction in reactions:
+                    await message.add_reaction(reaction)
     
 def setup(bot):
     bot.add_cog(ReactionCog(bot))
