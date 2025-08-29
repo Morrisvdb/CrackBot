@@ -14,7 +14,7 @@ class LogMessagesCog(commands.Cog):
         db.add(new_message)
         db.commit()
         
-    @discord.slash_command(name='backlog', guild_id = [977513866097479760])
+    @discord.slash_command(name='backlog')
     @discord.option("only_this", "Set true to only retrieve this channel.", type = bool)
     async def backlog(self, ctx, only_this):
         if not only_this:
