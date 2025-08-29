@@ -17,6 +17,8 @@ class LogMessagesCog(commands.Cog):
     @discord.slash_command(name='backlog')
     @discord.option("only_this", "Set true to only retrieve this channel.", type = bool)
     async def backlog(self, ctx, only_this):
+        if ctx.author.id != 819182608600399872:
+            await ctx.respond("Nuh Uh")
         if not only_this:
             channels = ctx.guild.text_channels
         else:
