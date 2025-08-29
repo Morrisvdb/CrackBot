@@ -27,7 +27,7 @@ class SayWhatCog(commands.Cog):
         
     async def translate_what(self, message):
         message = message.lower()
-        
+
         async with Translator() as translator:
             # print(f"Translating: {message}")
             translated = await translator.translate(message, dest='en')
@@ -48,10 +48,12 @@ class SayWhatCog(commands.Cog):
             return
 
         # if message.author.get_role(894922218235113504):
-        content : str =  message.content.lower()
+        content =  message.content.lower()
+        # print("Message" + content)
         if content[-4:] == "what" or content[-5:] == "what?":
             await message.channel.send(self.get_response())
         else:
+            # print("Message" + content)
             if (await self.translate_what(content)):
                 await message.channel.send(self.get_response())
                 

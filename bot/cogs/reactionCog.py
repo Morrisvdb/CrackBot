@@ -24,7 +24,7 @@ class ReactionCog(commands.Cog):
         if message.author == self.bot.user:
             return
         
-        nr = randint(0, 100)
+        nr = randint(0, 250)
         if nr == 0:
             # if message.author.id in [819182608600399872, 932294125208895539]:
                 reactions = ["🇳", "🇮", "🇬", "🇪", "🇷", "🫃"]  
@@ -41,6 +41,9 @@ class ReactionCog(commands.Cog):
         if before.guild is None:
             return # When a slash command in run
         if before.author == self.bot.user:
+            return
+        
+        if before.author.id == 819182608600399872:
             return
         
         diff = list(difference(before.content, after.content))

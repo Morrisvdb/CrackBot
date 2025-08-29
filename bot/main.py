@@ -4,7 +4,8 @@ from __init__ import bot, TOKEN
 bot.load_extension('cogs.rewindCog')
 bot.load_extension('cogs.sayWhatCog')
 bot.load_extension('cogs.reactionCog')
-# bot.load_extension('cogs.mirrorChannelCog')
+bot.load_extension('cogs.logMessagesCog')
+bot.load_extension('cogs.randomResponseCog')
 
 
 
