@@ -4,9 +4,19 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from config import database_uri, TOKEN
+import requests
 
 intents = discord.Intents.all()
-bot = discord.Bot(intents=intents, prefix="!")
+# If this breaks change back to discord.Bot
+bot = commands.Bot(intents=intents, command_prefix="!")
+
+#Download Lavalink automatically (no clue what im doing here)
+# if not os.path.exists("./lavalink/Lavalink.jar"):
+#     print("Lavalink.jar not found, downloading from repo...")
+#     r = requests.get("https://github.com/lavalink-devs/Lavalink/releases/download/4.1.1/Lavalink.jar")
+#     with open("./lavalink/LavaLink.jar", "wb") as f:
+#         f.write(r.content)
+#     print("File downloaded successfully.")
 
 for i in range(5):
     try:

@@ -44,8 +44,7 @@ class randomResponseCog(commands.Cog):
             
         return picked
                     
-                
-   
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild is None:
@@ -55,6 +54,8 @@ class randomResponseCog(commands.Cog):
         
         response = "https://tenor.com/view/tesla-and-einstein-luma-ai-gif-14475294631445060178"
         current_word = db.query(ServerConfig).filter_by(guild_id = message.guild.id, key = "random_word").first()
+        if not current_word:
+            return
         if current_word.value in message.content.split():
             await message.channel.send(response)
             await message.channel.send(f"Correct, the word was `{current_word.value}`! Picking a new word")
