@@ -24,14 +24,16 @@ class LogMessagesCog(commands.Cog):
         else:
             channels = [ctx.channel]
         
-        await ctx.respond(f"Aight, we cooking. Found {len(channels)} channels")
+        progress_message = await ctx.respond(f"Aight, we cooking. Found {len(channels)} channels")
         for channel in channels:
+            
             history = await channel.history(limit = None).flatten()
             for message in history:
                 new_message = Message.from_discord_message(message)
                 db.add(new_message)
                 db.commit()
-        await ctx.send("Success")
+            await progress_message.edit_original_response(content = f"Finished extracting {channel.name}")
+        await progress_message.edit_original_response(content = "Success, your secrets are now mine!")
         
     
     

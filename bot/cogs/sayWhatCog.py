@@ -27,6 +27,9 @@ class SayWhatCog(commands.Cog):
         
     async def translate_what(self, message):
         message = message.lower()
+        
+        if len(message) == 0:
+            return False
 
         async with Translator() as translator:
             # print(f"Translating: {message}")

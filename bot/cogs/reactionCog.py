@@ -43,8 +43,8 @@ class ReactionCog(commands.Cog):
         if before.author == self.bot.user:
             return
         
-        if before.author.id == 819182608600399872:
-            return
+        # if before.author.id == 819182608600399872:
+        #     return
         
         diff = list(difference(before.content, after.content))
         if len(diff) == 2:
@@ -60,7 +60,8 @@ class ReactionCog(commands.Cog):
                         safe = False
                         
             if not safe:
-                await after.add_reaction(await after.guild.fetch_emoji(1160854665462829068))
+                if before.guild.id == 894905195195150406: # Cuz custom emoji...
+                    await after.add_reaction(await after.guild.fetch_emoji(1160854665462829068))
     
 def setup(bot):
     bot.add_cog(ReactionCog(bot))
