@@ -63,5 +63,6 @@ class ReactionCog(commands.Cog):
                 if before.guild.id == 894905195195150406: # Cuz custom emoji...
                     await after.add_reaction(await after.guild.fetch_emoji(1160854665462829068))
     
-def setup(bot):
-    bot.add_cog(ReactionCog(bot))
+async def setup(bot):
+    await bot.add_cog(ReactionCog(bot))
+    # await bot.tree.sync()

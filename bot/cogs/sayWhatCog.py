@@ -3,6 +3,7 @@ from googletrans import Translator
 from numpy.random import choice
 from os import path
 import json
+from langdetect import detect
 
 class SayWhatCog(commands.Cog):
     def __init__(self, bot):
@@ -49,18 +50,21 @@ class SayWhatCog(commands.Cog):
             return # When a slash command in run
         if message.author == self.bot.user:
             return
+        
+        print(detect(message.content))
+        
+        if detect(message.content) == 'fr':
+            await message.channel.send("shut the fuck up you French cuck")
 
-        # if message.author.get_role(894922218235113504):
         content =  message.content.lower()
-        # print("Message" + content)
         if content[-4:] == "what" or content[-5:] == "what?":
             await message.channel.send(self.get_response())
         else:
-            # print("Message" + content)
             if (await self.translate_what(content)):
                 await message.channel.send(self.get_response())
                 
     
     
-def setup(bot):
-    bot.add_cog(SayWhatCog(bot))
+async def setup(bot):
+    await bot.add_cog(SayWhatCog(bot))
+    # await bot.tree.sync()

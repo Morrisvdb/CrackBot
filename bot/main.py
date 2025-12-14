@@ -10,12 +10,15 @@ from __init__ import bot, TOKEN
 # bot.load_extension('cogs.randomResponseCog')
 # bot.load_extension('cogs.entranceTuneCog')
 
-for file in os.listdir('./bot/cogs'):
-    if file.endswith('.py'):
-        bot.load_extension("cogs." + file[:-3])
+
 
 @bot.event
 async def on_ready():    
+    for file in os.listdir('./bot/cogs'):
+        if file.endswith('.py'):
+            await bot.load_extension("cogs." + file[:-3])
+            print("Loaded: " + file[:-3])
+        
     print(f'{bot.user.name} has connected to Discord!')
     
     # async def setup_hook(self) -> None:

@@ -1,5 +1,6 @@
 from discord.ext import commands
 import discord
+from discord import app_commands
 from __init__ import db
 from models import Message, ServerConfig
 from sqlalchemy import func
@@ -63,20 +64,26 @@ class randomResponseCog(commands.Cog):
             db.add(current_word)
             db.commit()
             
-    @discord.slash_command(name = "reset_word")
-    async def reset_word(self, ctx):
-        word = self.pick_random_word(ctx.guild)
-        
-        config = db.query(ServerConfig).filter_by(guild_id = ctx.guild.id, key = "random_word").first()
+    @app_commands.command(name="reset_word")
+    async def reset_word(self, interaction: discord.Interaction):
+        """Pick and set a new random word for this guild."""
+        guild = interaction.guild
+        if guild is None:
+            await interaction.response.send_message("This command must be used in a guild.", ephemeral=True)
+            return
+
+        word = self.pick_random_word(guild)
+
+        config = db.query(ServerConfig).filter_by(guild_id=guild.id, key="random_word").first()
         if config:
-            await ctx.respond(f"The chosen word was `{config.value}`, selecting a new word")
+            await interaction.response.send_message(f"The chosen word was `{config.value}`, selecting a new word")
             config.value = word
             db.add(config)
             db.commit()
             return
-        
-        await ctx.respond("No word was chosen beofre, setting word.")
-        new_config = ServerConfig(guild_id = ctx.guild.id, key = "random_word", value = word)
+
+        await interaction.response.send_message("No word was chosen before, setting word.")
+        new_config = ServerConfig(guild_id=guild.id, key="random_word", value=word)
         db.add(new_config)
         db.commit()
             
@@ -85,5 +92,6 @@ class randomResponseCog(commands.Cog):
                 
     
     
-def setup(bot):
-    bot.add_cog(randomResponseCog(bot))
+async def setup(bot):
+    await bot.add_cog(randomResponseCog(bot))
+    # await bot.tree.sync()
