@@ -3,7 +3,7 @@ from googletrans import Translator
 from numpy.random import choice
 from os import path
 import json
-from langdetect import detect
+from langdetect import detect, lang_detect_exception
 
 class SayWhatCog(commands.Cog):
     def __init__(self, bot):
@@ -51,10 +51,12 @@ class SayWhatCog(commands.Cog):
         if message.author == self.bot.user:
             return
         
-        print(detect(message.content))
-        
-        if detect(message.content) == 'fr':
-            await message.channel.send("shut the fuck up you French cuck")
+        try:        
+            if detect(message.content) == 'fr':
+                await message.channel.send("shut the fuck up you French cuck")
+        except lang_detect_exception.LangDetectException:
+            pass
+            
 
         content =  message.content.lower()
         if content[-4:] == "what" or content[-5:] == "what?":
