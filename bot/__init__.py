@@ -4,7 +4,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from config import database_uri, TOKEN
-import requests
+
+from lingua import Language, LanguageDetectorBuilder
+languages = [Language.ENGLISH, Language.FRENCH]
+detector = LanguageDetectorBuilder.from_languages(*languages).build()
 
 intents = discord.Intents.all()
 # If this breaks change back to discord.Bot

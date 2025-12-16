@@ -2,6 +2,7 @@ from discord.ext import commands
 from googletrans import Translator
 from numpy.random import choice
 from os import path
+from __init__ import detector
 import json
 from langdetect import detect, lang_detect_exception
 
@@ -50,9 +51,8 @@ class SayWhatCog(commands.Cog):
             return # When a slash command in run
         if message.author == self.bot.user:
             return
-        
-        try:        
-            if detect(message.content) == 'fr':
+        try:
+            if detector.detect_language_of(message.content).name == 'FRENCH':
                 await message.channel.send("shut the fuck up you French cuck")
         except lang_detect_exception.LangDetectException:
             pass
