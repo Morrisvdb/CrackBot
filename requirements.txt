@@ -19,7 +19,7 @@ httpx==0.28.1
 hyperframe==6.1.0
 idna==3.10
 langdetect==1.0.9
-lingua-language-detector==2.1.1
+lingua-language-detector==2.0.2
 multidict==6.6.4
 numpy==2.0.2
 propcache==0.3.2

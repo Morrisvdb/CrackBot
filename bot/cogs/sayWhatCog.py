@@ -52,7 +52,7 @@ class SayWhatCog(commands.Cog):
         if message.author == self.bot.user:
             return
         try:
-            if detector.detect_language_of(message.content).name == 'FRENCH':
+            if detector.detect_language_of(message.content).name == 'FRENCH' and detect(message.content) == 'fr':
                 await message.channel.send("shut the fuck up you French cuck")
         except lang_detect_exception.LangDetectException:
             pass
